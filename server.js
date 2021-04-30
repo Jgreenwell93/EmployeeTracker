@@ -186,7 +186,91 @@ const startMenu = () => {
                     )
             }
 
-            // create an addEmployee function query
+            //Function that prompts user for info on the employee they'd like to add
+            addEmployee = () => {
+                connection.query(queries.rolesQuery, (err, res) => {
+                    if (err) throw (err);
+                    const roleChoices = res.map((role) => {
+                        return {
+                            name: role.title,
+                            value: role.id
+                        }
+                    })
+                    connection.query(queries.employeeTableQuery, (err, res) => {
+                        if (err) throw (err);
+                        const managerChoices = res.map((employee) => {
+                            return {
+                                name: `${employee.first_name} ${employee.last_name}`,
+                                value: employee.id
+                            }
+                        })
+                        managerChoices.push("None")
+                        inquirer
+                            .prompt([
+                                {
+                                    name: 'firstName',
+                                    type: 'input',
+                                    message: "Employee First Name:"
+                                },
+                                {
+                                    name: 'lastName',
+                                    type: 'input',
+                                    message: "Employee Last Name:"
+                                },
+                                {
+                                    name: 'role',
+                                    type: 'list',
+                                    message: "Select Role:",
+                                    choices: roleChoices
+                                },
+                                {
+                                    name: 'hasManager',
+                                    type: 'list',
+                                    message: "Does this employee have a manager?",
+                                    choices: ['Yes', 'No']
+                                }
+                            ]).then((answer => {
+                                switch (answer.hasManager) {
+                                    case "No":
+                                        const insertEmpQuery = `INSERT INTO employee (first_name, last_name, role_id) VALUES ('${answer.firstName}', '${answer.lastName}', '${answer.role}')`
+                                        connection.query(insertEmpQuery, (err, res) => {
+                                            if (err) throw err
+                                            connection.query(queries.currentEmployeeQuery, (err, res) => {
+                                                if (err) throw err
+                                                console.table(res)
+                                                console.log(`${answer.firstName} ${answer.lastName} has been added to your employees!`)
+                                                addAdditionalEmployee();
+                                            })
+                                        })
+                                        break
+                                    case "Yes":
+                                        selectManager(managerChoices, answer);
+                                        break
+                                }
+                            }))
+                    })
+                })
+            }
+            // function that asks a user if they want to add another employee. If yes, calls back addEmployee function, else loops back to start
+            addAdditionalEmployee = () => {
+                addAnother =
+                {
+                    name: 'addEmployee',
+                    type: 'list',
+                    message: "Would you like to add another employee?",
+                    choices: ['Yes', 'No']
+                }
+
+                inquirer
+                    .prompt(addAnother)
+                    .then((answer => {
+                        if (answer.addEmployee === 'Yes') {
+                            addEmployee();
+                            return;
+                        } else startMenu();
+                    })
+                    )
+            }
 
             // create an updateRole function query
 
