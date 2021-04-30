@@ -158,12 +158,32 @@ const startMenu = () => {
                                     if (err) throw err
                                     console.table(res)
                                     console.log(`\n${answer.role} has been added to your roles!\n`)
-                                    addAnotherRole();
+                                    addAdditionalRole();
                                 })
                             })
 
                         }))
                 })
+            }
+            // function that requests a user if they would like to create another role. Calls back addRole function if Yes.
+            addAdditionalRole = () => {
+                addAnother =
+                {
+                    name: 'addRole',
+                    type: 'list',
+                    message: "Would you like to add another role?",
+                    choices: ['Yes', 'No']
+                }
+
+                inquirer
+                    .prompt(addAnother)
+                    .then((answer => {
+                        if (answer.addRole === 'Yes') {
+                            addRole();
+                            return;
+                        } else startMenu();
+                    })
+                    )
             }
 
             // create an addEmployee function query
