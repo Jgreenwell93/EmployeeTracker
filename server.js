@@ -22,7 +22,58 @@ const startMenu =  () => {
       'View Departments','View Roles','View Employees', 'View Employees By Department','View Employees By Manager', "View a Department's Budget", 
       'Delete Role','Delete Department','Delete Employee','Exit']
     })
-    .then
+    .then((answer => {
+        switch (answer.start) {
+            case "Add Employee":
+              addEmployee();
+              break
+            case "Add Role":
+              addRole();
+              break
+            case "Add Department":
+              addDepartment();
+              break
+            case "Update An Employee's Role":
+              updateRole();
+              break
+            case "Update An Employee's Manager":
+              updateManager();
+              break
+            case "Update a Role's Salary":
+              updateSalary();
+              break
+            case "View Departments":
+              viewDepartments();
+              break
+            case "View Roles":
+              viewRoles();
+              break
+            case "View Employees":
+              viewAllEmp();
+              break
+            case "View Employees By Department":
+              viewByDepartment();
+              break
+            case "View Employees By Manager":
+              viewByManager();
+              break
+            case "View a Department's Budget":
+              departmentBudget();
+              break
+            case "Delete Employee":
+              deleteEmployee();
+              break
+            case "Delete Role":
+              deleteRole();
+              break
+            case "Delete Department":
+              deleteDepartment();
+              break
+            case "Exit":
+              console.log(exitAscii)
+              connection.end();
+              break
+        }
 // create a switch case that will take in the users selection and start a query or function based upon selection
 
 // create an addDepapment function query
