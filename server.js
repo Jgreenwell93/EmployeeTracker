@@ -346,7 +346,39 @@ const startMenu = () => {
 
             // create a viewDepaprmentBudget function query
 
-            //  create a deleteRole function query
+            //Deletes Roles
+            deleteRole = () => {
+                roleQuery = `SELECT id, title, salary
+    FROM employeedb.role;`
+                connection.query(roleQuery, (err, res) => {
+                    if (err) throw (err);
+                    console.log('Role Table:')
+                    console.table(res);
+                    const roleChoices = res.map((role) => {
+                        return {
+                            name: role.title,
+                            value: role.id
+                        }
+                    })
+                    inquirer
+                        .prompt([
+                            {
+                                name: 'role',
+                                type: 'list',
+                                message: `Which role would you like to delete? \n WARNING: THIS CANNOT BE UNDONE!`,
+                                choices: roleChoices
+                            }
+                        ]).then((answer => {
+                            const deleteQuery = `DELETE FROM role WHERE id=${answer.role}`
+                            connection.query(deleteQuery, (err, res) => {
+                                if (err) throw err
+                                console.log(`\nRole has been deleted!`)
+                                viewRoles();
+                            })
+
+                        }))
+                })
+            }
 
             //  create a deleteDepartment function query
 
