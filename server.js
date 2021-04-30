@@ -91,7 +91,7 @@ const startMenu = () => {
                         const query = `INSERT INTO department (department_name) VALUES ('${answer.department}')`
                         connection.query(query, (err, res) => {
                             if (err) throw err
-                            connection.query("SELECT * FROM employeedb.department;", (err, res) => {
+                            connection.query("SELECT * FROM employee_DB.department;", (err, res) => {
                                 if (err) throw err
                                 console.table(res)
                                 console.log(`\n${answer.department} has been added to your departments!\n`)
@@ -156,7 +156,7 @@ const startMenu = () => {
                             const query = `INSERT INTO role (title, salary, department_id) VALUES ('${answer.role}', '${answer.salary}', '${answer.department}')`
                             connection.query(query, (err, res) => {
                                 if (err) throw err
-                                connection.query("SELECT * FROM employeedb.role;", (err, res) => {
+                                connection.query("SELECT * FROM employee_DB.role;", (err, res) => {
                                     if (err) throw err
                                     console.table(res)
                                     console.log(`\n${answer.role} has been added to your roles!\n`)
@@ -371,7 +371,7 @@ const startMenu = () => {
             const viewRoles = () => {
                 console.log(`\n`)
                 console.log('-------------ALL ROLES------------')
-                const allRolesQuery = "SELECT * FROM employeedb.role;"
+                const allRolesQuery = "SELECT * FROM employee_DB.role;"
                 connection.query(allRolesQuery, (err, data) => {
                     if (err) throw err
                     console.table(data)
@@ -400,7 +400,7 @@ const startMenu = () => {
             //Deletes Roles
             deleteRole = () => {
                 roleQuery = `SELECT id, title, salary
-    FROM employeedb.role;`
+    FROM employee_DB.role;`
                 connection.query(roleQuery, (err, res) => {
                     if (err) throw (err);
                     console.log('Role Table:')
