@@ -311,7 +311,7 @@ const startMenu = () => {
                     if (err) throw err
                     console.table(data)
                     console.log(`\n`)
-                    //    add return menu call back after built
+                    nextStep();
                 })
             }
 
@@ -325,7 +325,7 @@ const startMenu = () => {
                     if (err) throw err
                     console.table(data)
                     console.log(`\n`)
-                    //    add return menu call back after built
+                    nextStep();
                 })
             }
 
@@ -336,7 +336,7 @@ const startMenu = () => {
                 connection.query(queries.currentEmployeeQuery, (err, data) => {
                     if (err) throw err
                     console.table(data)
-                    //    add return menu call back after built
+                    nextStep();
                 })
             }
 
@@ -350,9 +350,55 @@ const startMenu = () => {
 
             //  create a deleteDepartment function query
 
-            //  create a deleteEmployee function query
+            //Lets user delete employee
+            deleteEmployee = () => {
+                connection.query(queries.currentEmployeeQuery, (err, res) => {
+                    if (err) throw (err);
+                    console.table(res);
+                    const employeeChoices = res.map((employee) => {
+                        return {
+                            name: employee.Employee_Name,
+                            value: employee.id
+                        }
+                    })
+                    inquirer
+                        .prompt([
+                            {
+                                name: 'employee',
+                                type: 'list',
+                                message: "Which employee would you like to delete? WARNING: This cannot be undone.",
+                                choices: employeeChoices
+                            }
+                        ]).then((answer => {
+                            const deleteQuery = `DELETE FROM employee WHERE id=${answer.employee}`
+                            connection.query(deleteQuery, (err, res) => {
+                                if (err) throw err
+                                console.log(`\nEmployee has been deleted!`)
+                                viewAllEmp();
+                            })
+                        }))
+                })
+            }
 
-            //  create exit end connection function query
+            nextStep = () => {
+                inquirer
+                    .prompt([
+                        {
+                            name: 'whatNow',
+                            type: 'list',
+                            message: 'What would you like to do now?',
+                            choices: ['Return to Main Menu', 'Exit']
+                        }
+                    ])
+                    .then(answer => {
+                        if (answer.whatNow == 'Return to Main Menu') {
+                            startMenu();
+                        } else {
+                            console.log(ascii.exitAscii)
+                            connection.end();
+                        }
+                    })
+            }
 
 
 
