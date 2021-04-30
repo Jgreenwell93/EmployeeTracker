@@ -329,7 +329,16 @@ const startMenu = () => {
                 })
             }
 
-            // creat a viewEmployees function query
+
+            const viewAllEmp = () => {
+                console.log(`\n`)
+                console.log('---------------------------------ALL CURRENT EMPLOYEES---------------------------------')
+                connection.query(queries.currentEmployeeQuery, (err, data) => {
+                    if (err) throw err
+                    console.table(data)
+                    //    add return menu call back after built
+                })
+            }
 
             // create a viewEmployeeByDeparpment function query
 
