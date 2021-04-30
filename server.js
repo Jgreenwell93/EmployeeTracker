@@ -251,6 +251,31 @@ const startMenu = () => {
                     })
                 })
             }
+
+            //addEmployee addional function that lets a user select a manager if one exists
+            const selectManager = (managerChoices, answer) => {
+                inquirer
+                    .prompt([
+                        {
+                            name: 'managerName',
+                            type: 'list',
+                            message: "Select Employee's Manager",
+                            choices: managerChoices
+                        }
+                    ]).then((mgrAnswer => {
+                        const query = `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES ('${answer.firstName}', '${answer.lastName}', '${answer.role}', '${mgrAnswer.managerName}')`
+                        connection.query(query, (err, res) => {
+                            if (err) throw err
+                            connection.query(queries.currentEmployeeQuery, (err, res) => {
+                                if (err) throw err
+                                console.table(res)
+                                console.log(`${answer.firstName} ${answer.lastName} has been added to your employees!\n`)
+                                addAdditionalEmployee();
+                            })
+                        })
+                    }))
+            }
+
             // function that asks a user if they want to add another employee. If yes, calls back addEmployee function, else loops back to start
             addAdditionalEmployee = () => {
                 addAnother =
