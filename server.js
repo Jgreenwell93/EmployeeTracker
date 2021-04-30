@@ -11,8 +11,18 @@ const connection = mysql.createConnection({
     database: 'employee_db',
 });
 
-// create inquirer prompt asking user if they would like to Add Department, Add Role, Add Employee, Update An Employee's Role,  Update An Employee's Manager, Update a Role's Salary, View Departments, View Roles, View Employees , View Employees By Department, View Employees By Manager, View a Department's Total Budget, Delete Role,Delete Department,Delete Employee, Exit
-
+//Main Menu in Terminal
+const startMenu =  () => {
+    inquirer
+    .prompt({
+      name: 'start',
+      type: 'list',
+      message: 'What would you like to do?',
+      choices: ['Add Department','Add Role','Add Employee', "Update An Employee's Role", "Update An Employee's Manager", "Update a Role's Salary", 
+      'View Departments','View Roles','View Employees', 'View Employees By Department','View Employees By Manager', "View a Department's Budget", 
+      'Delete Role','Delete Department','Delete Employee','Exit']
+    })
+    .then
 // create a switch case that will take in the users selection and start a query or function based upon selection
 
 // create an addDepapment function query
