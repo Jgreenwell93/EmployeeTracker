@@ -311,12 +311,23 @@ const startMenu = () => {
                     if (err) throw err
                     console.table(data)
                     console.log(`\n`)
-                //    add return menu call back after built
+                    //    add return menu call back after built
                 })
             }
 
 
-            // create a viewRole function query
+
+            const viewRoles = () => {
+                console.log(`\n`)
+                console.log('-------------ALL ROLES------------')
+                const allRolesQuery = "SELECT * FROM employeedb.role;"
+                connection.query(allRolesQuery, (err, data) => {
+                    if (err) throw err
+                    console.table(data)
+                    console.log(`\n`)
+                    //    add return menu call back after built
+                })
+            }
 
             // creat a viewEmployees function query
 
