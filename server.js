@@ -121,7 +121,50 @@ const startMenu = () => {
             }
 
 
-            // create an addRole function query
+            //addRole function that lets a users to add a role. 
+            addRole = () => {
+                connection.query('SELECT * FROM department', (err, res) => {
+                    if (err) throw (err);
+                    const deptChoices = res.map((department) => {
+                        return {
+                            name: department.department_name,
+                            value: department.id
+                        }
+                    })
+                    inquirer
+                        .prompt([
+                            {
+                                name: 'role',
+                                type: 'input',
+                                message: "Title of Role:"
+                            },
+                            {
+                                name: 'salary',
+                                type: 'input',
+                                message: "What is the role's average salary?:"
+                            },
+                            {
+                                name: 'department',
+                                type: 'list',
+                                message: "Which department does this role belong:",
+                                choices: deptChoices
+                            },
+                        ]).then((answer => {
+
+                            const query = `INSERT INTO role (title, salary, department_id) VALUES ('${answer.role}', '${answer.salary}', '${answer.department}')`
+                            connection.query(query, (err, res) => {
+                                if (err) throw err
+                                connection.query("SELECT * FROM employeedb.role;", (err, res) => {
+                                    if (err) throw err
+                                    console.table(res)
+                                    console.log(`\n${answer.role} has been added to your roles!\n`)
+                                    addAnotherRole();
+                                })
+                            })
+
+                        }))
+                })
+            }
 
             // create an addEmployee function query
 
