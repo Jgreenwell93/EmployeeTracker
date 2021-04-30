@@ -36,9 +36,9 @@ const startMenu = () => {
                 case "Update An Employee's Role":
                     updateRole();
                     break
-                case "Update An Employee's Manager":
-                    updateManager();
-                    break
+                // case "Update An Employee's Manager":
+                //     updateManager();
+                //     break
                 case "Update a Role's Salary":
                     updateSalary();
                     break
@@ -51,15 +51,15 @@ const startMenu = () => {
                 case "View Employees":
                     viewAllEmp();
                     break
-                case "View Employees By Department":
-                    viewByDepartment();
-                    break
-                case "View Employees By Manager":
-                    viewByManager();
-                    break
-                case "View a Department's Budget":
-                    departmentBudget();
-                    break
+                // case "View Employees By Department":
+                //     viewByDepartment();
+                //     break
+                // case "View Employees By Manager":
+                //     viewByManager();
+                //     break
+                // case "View a Department's Budget":
+                //     departmentBudget();
+                //     break
                 case "Delete Employee":
                     deleteEmployee();
                     break
@@ -70,10 +70,12 @@ const startMenu = () => {
                     deleteDepartment();
                     break
                 case "Exit":
-                    console.log(exitAscii)
+                    console.log('goodbye!')
                     connection.end();
                     break
             }
+        }))
+    };
 
             //Adding a deparpment function that allows a user to add a department with an insert query
             addDepartment = () => {
@@ -297,11 +299,60 @@ const startMenu = () => {
                     )
             }
 
-            // create an updateRole function query
+            updateRole = () => {
+                connection.query('SELECT * FROM role', (err, res) => {
+                    if (err) throw (err);
+                    const roleChoices = res.map((role) => {
+                        return {
+                            name: role.title,
+                            value: role.id
+                        }
+                    })
+                    connection.query('SELECT * FROM employee', (err, res) => {
+                        if (err) throw (err);
+                        const employeeChoices = res.map((employee) => {
+                            return {
+                                name: `${employee.first_name} ${employee.last_name}`,
+                                value: employee.id
+                            }
+                        })
+                        inquirer
+                            .prompt([
+                                {
+                                    name: 'employee',
+                                    type: 'list',
+                                    message: "Which Employee's role would you like to update?",
+                                    choices: employeeChoices
+                                },
+                                {
+                                    name: 'role',
+                                    type: 'list',
+                                    message: "Which role would you like to assign to them?",
+                                    choices: roleChoices
+                                },
+                            ]).then((answer => {
+                                console.log(answer)
+                                const query = `
+                            UPDATE employee
+                            SET role_id = ${answer.role}
+                            WHERE id=${answer.employee};`
+                                connection.query(query, (err, res) => {
+                                    if (err) throw err
+                                    connection.query(`${queries.newRoleQuery} WHERE employee.id=${answer.employee}`, (err, res) => {
+                                        if (err) throw err
+                                        console.table(res)
+                                        console.log(`Employee's role has been updated!`)
+                                        nextStep();
+                                    })
+                                })
+
+                            }))
+                    })
+                })
+            }
 
             // create an updateManager function query
 
-            // create an updateRole functin query
 
 
             const viewDepartments = () => {
@@ -426,7 +477,7 @@ const startMenu = () => {
                         if (answer.whatNow == 'Return to Main Menu') {
                             startMenu();
                         } else {
-                            console.log(ascii.exitAscii)
+                            console.log('goodbye!')
                             connection.end();
                         }
                     })
@@ -438,5 +489,5 @@ const startMenu = () => {
             connection.connect((err) => {
                 if (err) throw err;
                 console.log("Welcome to the Employee Tracker")
-                // add starting function
+                startMenu();
             });
