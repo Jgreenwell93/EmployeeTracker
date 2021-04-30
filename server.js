@@ -93,10 +93,31 @@ const startMenu = () => {
                                 if (err) throw err
                                 console.table(res)
                                 console.log(`\n${answer.department} has been added to your departments!\n`)
+                                addAdditionalDept();
                             })
                         })
 
                     }))
+            }
+            //addAdditionalDept function that asks user if they want to add another Department. Calls back addDepartment() if Yes
+            addAdditionalDept = () => {
+                addAnother =
+                {
+                    name: 'addDepartment',
+                    type: 'list',
+                    message: "Would you like to add another department?",
+                    choices: ['Yes', 'No']
+                }
+
+                inquirer
+                    .prompt(addAnother)
+                    .then((answer => {
+                        if (answer.addDepartment === 'Yes') {
+                            addDepartment();
+                            return;
+                        } else startMenu();
+                    })
+                    )
             }
 
 
