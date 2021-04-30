@@ -303,7 +303,18 @@ const startMenu = () => {
 
             // create an updateRole functin query
 
-            // create a viewDepapment function query
+
+            const viewDepartments = () => {
+                console.log(`\n`)
+                console.log('----------ALL DEPARTMENTS---------')
+                connection.query(queries.departmentsQuery, (err, data) => {
+                    if (err) throw err
+                    console.table(data)
+                    console.log(`\n`)
+                //    add return menu call back after built
+                })
+            }
+
 
             // create a viewRole function query
 
